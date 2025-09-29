@@ -16,6 +16,15 @@
 </head>
 
 <body>
+    <script>
+        // Redirige automáticamente a la versión con MindAR (image tracking sin marcador)
+        window.location.replace('mindar.html');
+    </script>
+    <noscript>
+        <div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif;">
+            Habilita JavaScript o abre <a href="mindar.html" style="margin-left:6px;">mindar.html</a>
+        </div>
+    </noscript>
     <a-scene embedded vr-mode-ui="enabled: false"
         arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
 
@@ -25,7 +34,7 @@
         <!-- El marcador -->
         <a-marker type="pattern" url="markers/pattern-ac-3-remaster-heroBanner.patt">
             <!-- Aquí tu modelo 3D -->
-            <a-entity gltf-model="modelos/pattern-ac-3-remaster-heroBanner.gltf" scale="0.2 0.2 0.2" position="0 0 0">
+            <a-entity gltf-model="modelos/Entamar_Mesh_fox_pose.glb" scale="0.2 0.2 0.2" position="0 0 0">
             </a-entity>
         </a-marker>
 

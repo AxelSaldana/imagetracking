@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>MindAR Image Tracking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <!-- MindAR for A-Frame -->
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.4/dist/mindar-image-aframe.prod.js"></script>
+    <style>
+      html, body { margin: 0; padding: 0; overflow: hidden; }
+      #hint { position: fixed; left: 12px; bottom: 12px; color: #fff; background: rgba(0,0,0,.55); padding: 8px 12px; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 14px; z-index: 2; }
+      #error { position: fixed; left: 50%; transform: translateX(-50%); top: 12px; color: #fff; background: #c0392b; padding: 8px 12px; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 14px; z-index: 2; display:none; }
+    </style>
+  </head>
+  <body>
+    <div id="hint">Apunta la cámara a tu imagen objetivo. Asegúrate de tener <code>targets/targets.mind</code> generado.</div>
+    <div id="error">No se pudo cargar <code>targets/targets.mind</code>. Genera el archivo desde tu imagen y recarga.</div>
+
+    <a-scene
+      mindar-image="imageTargetSrc: targets/targets.mind; filterMinCF: 0.001; filterBeta: 0.01;"
+      color-space="sRGB"
+      renderer="colorManagement: true, physicallyCorrectLights: true"
+      embedded
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: true">
+
+      <a-assets timeout="10000">
+        <a-asset-item id="fox" src="modelos/Entamar_Mesh_fox_pose.glb"></a-asset-item>
+      </a-assets>
+
+      <!-- targetIndex: 0 hace referencia al primer target dentro de targets.mind -->
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-entity gltf-model="#fox" position="0 0 0" rotation="0 0 0" scale="0.2 0.2 0.2"></a-entity>
+      </a-entity>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    </a-scene>
+
+    <script>
+      // Mostrar un mensaje si falla la carga del target
+      document.querySelector('a-scene').addEventListener('rendererinitialized', () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('HEAD', 'targets/targets.mind');
+        xhr.onload = () => {
+          if (xhr.status >= 400) document.getElementById('error').style.display = 'block';
+        };
+        xhr.onerror = () => document.getElementById('error').style.display = 'block';
+        xhr.send();
+      });
+    </script>
+  </body>
+</html>
