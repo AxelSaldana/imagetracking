@@ -4,11 +4,12 @@
     <meta charset="utf-8" />
     <title>MindAR Image Tracking</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <!-- MindAR for A-Frame -->
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.4/dist/mindar-image-aframe.prod.js"></script>
     <style>
-      html, body { margin: 0; padding: 0; overflow: hidden; }
+      html, body { margin: 0; padding: 0; overflow: hidden; width: 100%; height: 100%; }
+      a-scene { position: fixed !important; inset: 0; width: 100vw; height: 100vh; }
       #hint { position: fixed; left: 12px; bottom: 12px; color: #fff; background: rgba(0,0,0,.55); padding: 8px 12px; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 14px; z-index: 2; }
       #error { position: fixed; left: 50%; transform: translateX(-50%); top: 12px; color: #fff; background: #c0392b; padding: 8px 12px; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 14px; z-index: 2; display:none; }
     </style>
@@ -20,8 +21,7 @@
     <a-scene
       mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.4/examples/image-tracking/assets/card/targets.mind; filterMinCF: 0.001; filterBeta: 0.01;"
       color-space="sRGB"
-      renderer="colorManagement: true, physicallyCorrectLights: true"
-      embedded
+      renderer="colorManagement: true, physicallyCorrectLights: false, alpha: true, antialias: true"
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: true">
 
@@ -29,9 +29,16 @@
         <a-asset-item id="fox" src="modelos/Entamar_Mesh_fox_pose.glb"></a-asset-item>
       </a-assets>
 
+      <!-- Luces simples para asegurar visibilidad del modelo -->
+      <a-entity light="type: ambient; intensity: 1"></a-entity>
+      <a-entity light="type: directional; intensity: 0.8" position="0 1 1"></a-entity>
+
       <!-- targetIndex: 0 hace referencia al primer target dentro de targets.mind -->
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-entity gltf-model="#fox" position="0 0 0" rotation="0 0 0" scale="0.2 0.2 0.2"></a-entity>
+        <!-- Objeto de prueba (si lo ves, el tracking funciona aún sin GLB) -->
+        <a-box position="0 0 0.05" depth="0.1" height="0.1" width="0.1" color="#4CC3D9"></a-box>
+        <!-- Modelo GLB -->
+        <a-entity gltf-model="#fox" position="0 0 0" rotation="0 0 0" scale="0.15 0.15 0.15"></a-entity>
       </a-entity>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
